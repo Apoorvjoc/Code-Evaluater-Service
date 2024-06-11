@@ -13,8 +13,11 @@ export default class SampleJob implements IJob{
         this.payload = payload
     }
 
-    handle = ()=>{
-        console.log("Handler called");
+    handle = (job?: Job<any, any, string> | undefined)=>{
+        console.log("Handler called with payload " , this.payload);
+        if (job) {
+            console.log("Handler called" , job.name , " " , job.id , " " , job.data);
+        }
     }
 
     failed = (job?: Job<any, any, string> | undefined) => {
