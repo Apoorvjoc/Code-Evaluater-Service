@@ -11,10 +11,10 @@ app.use("/api" , appRouter);
 app.listen(serverConfig.PORT , ()=>{
     console.log("Server started at...." , serverConfig.PORT);
 
-    SampleWorker('sampleQueue');
+    SampleWorker('sampleQueue'); // creating worker (or consumer) which will listen to async call through queue
 
-    sampleQueueProducer("SampleJob" , {
+    sampleQueueProducer("SampleJob" , {   // creating producer which will keep object in queue here object as { jobName ,  {name : Apoorv, location : Nainital } }
         name : "Apoorv" ,
-        location : "Blr"
+        location : "Nainital"
     });
 });
