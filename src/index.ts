@@ -5,7 +5,7 @@ import serverConfig from "./configs/server.config";
 import appRouter from "./routes";
 import serverAdapter from "./configs/bullBoard.config"; 
 import SampleWorker from "./workers/sampleWorker";
-import runPython from "./containers/runPythonDocker";
+import runJava from "./containers/runJavaDocker";
 
 const app = express();
  
@@ -31,16 +31,34 @@ app.listen(serverConfig.PORT , ()=>{
 // const inputString = `10
 // 20`
 
-const code = 
-`x = input();
-print("Value of x is : " , x)
-for i in range(int(x)):
-    print(i)
-`
+// const pythonCode = 
+// `x = input();
+// print("Value of x is : " , x)
+// for i in range(int(x)):
+//     print(i)
+// `
 
 const inputString = `10`
 
-    runPython(code , inputString);
+    // runPython(pythonCode , inputString);
+
+const javaCode = `
+import java.util.*;
+class Main{
+
+    public static void main(String a[]){
+        Scanner sc = new Scanner(System.in);
+        int num = sc.nextInt();
+        System.out.println("value entered by user is : " + num);
+        for(int i = 0 ; i<num ; i++){
+            System.out.println(i);
+        }
+    }
+
+}
+`
+
+    runJava(javaCode , inputString)
 
     // sampleQueueProducer("SampleJob" , {   // creating producer which will keep object in queue here object as { jobName ,  {name : Apoorv, location : Nainital } }
     //     name : "Apoorv" ,

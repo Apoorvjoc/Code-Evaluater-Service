@@ -1,4 +1,5 @@
-export const PYTHON_IMAGE = "python:3.8-slim"
+export const PYTHON_IMAGE = "python:3.8-slim";
+export const JAVA_IMAGE = "openjdk:11-jdk-slim";
 
 
 // this represent size of header in docker stream by default it is of 8 bytes 

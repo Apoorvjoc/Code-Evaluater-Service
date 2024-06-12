@@ -1,15 +1,15 @@
 import createContainer from "./containerFactory";
-import { PYTHON_IMAGE } from "../utils/constants";
+import { JAVA_IMAGE } from "../utils/constants";
 import decodeDockerStream from "./dockerHelper";
 
 
-async function runPython(code:string , inputTestCase : string) {
+async function runJava(code:string , inputTestCase : string) {
 
     console.log("Initializing new Python container "+inputTestCase," code ",code);
 
-    const runCmd = `echo '${code.replace(/'/g, `'\\"`)}' > test.py && echo '${inputTestCase.replace(/'/g, `'\\"`)}' | python3 test.py`;
+    const runCmd = `echo '${code.replace(/'/g, `'\\"`)}' > Main.java && javac Main.java && echo '${inputTestCase.replace(/'/g, `'\\"`)}' | java Main`;
     
-    const pythonDockerContainer = await createContainer(PYTHON_IMAGE , 
+    const javaDockerContainer = await createContainer(JAVA_IMAGE , 
         ['/bin/sh','-c' , runCmd]
     );
 
@@ -22,12 +22,12 @@ async function runPython(code:string , inputTestCase : string) {
     // value of x is : 8 --> output 
     // so these 2 lines will be disabled with stty echo flag
 
-    await pythonDockerContainer.start(); // starting / booting repective docker container
+    await javaDockerContainer.start(); // starting / booting repective docker container
 
     console.log("Started Docker container :)");
 
 
-    const logStream = await pythonDockerContainer.logs({
+    const logStream = await javaDockerContainer.logs({
         stdout:true, // as it is a read stream 
         stderr:true,
         timestamps: false,
@@ -52,7 +52,7 @@ async function runPython(code:string , inputTestCase : string) {
         })
     })
 
-    await pythonDockerContainer.remove(); // it removes docker container once work completed
+    await javaDockerContainer.remove(); // it removes docker container once work completed
 }
 
-export default runPython;
+export default runJava;
