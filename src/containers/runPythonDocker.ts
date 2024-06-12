@@ -41,16 +41,18 @@ async function runPython(code:string , inputTestCase : string) {
         rawLogBuffer.push(chunk)
     })
 
-    logStream.on('end' , ()=>{
-        console.log("Ended " , rawLogBuffer);
-        const completeBuffer = Buffer.concat(rawLogBuffer);  // jitte bhi buffer honge unko concat karega
-        const decodeStream = decodeDockerStream(completeBuffer);
-        console.log("Stream ", decodeStream);
-        console.log("decoded str " , decodeStream.stdout);
-        
+    await new Promise((res , _)=>{
+        logStream.on('end' , ()=>{
+            console.log("Ended " , rawLogBuffer);
+            const completeBuffer = Buffer.concat(rawLogBuffer);  // jitte bhi buffer honge unko concat karega
+            const decodeStream = decodeDockerStream(completeBuffer);
+            console.log("Stream ", decodeStream);
+            console.log("decoded str " , decodeStream.stdout);
+            res(decodeDockerStream)
+        })
     })
 
-    return pythonDockerContainer;
+    await pythonDockerContainer.remove();
 }
 
 export default runPython;
