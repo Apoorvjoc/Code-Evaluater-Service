@@ -1,15 +1,15 @@
 import createContainer from "./containerFactory";
-import { JAVA_IMAGE } from "../utils/constants";
+import { CPP_IMAGE } from "../utils/constants";
 import decodeDockerStream from "./dockerHelper";
 
 
-async function runJava(code:string , inputTestCase : string) {
+async function runCpp(code:string , inputTestCase : string) {
 
-    console.log("Initializing new Java container "+inputTestCase," code ",code);
+    console.log("Initializing new Cpp container "+inputTestCase," code ",code);
 
-    const runCmd = `echo '${code.replace(/'/g, `'\\"`)}' > Main.java && javac Main.java && echo '${inputTestCase.replace(/'/g, `'\\"`)}' | java Main`;
+    const runCmd = `echo '${code.replace(/'/g, `'\\"`)}' > main.cpp && g++ main.cpp -o main && echo '${inputTestCase.replace(/'/g, `'\\"`)}' | stdbuf -oL -eL ./main`;
     
-    const javaDockerContainer = await createContainer(JAVA_IMAGE , 
+    const cppDockerContainer = await createContainer(CPP_IMAGE , 
         ['/bin/sh','-c' , runCmd]
     );
 
@@ -22,12 +22,12 @@ async function runJava(code:string , inputTestCase : string) {
     // value of x is : 8 --> output 
     // so these 2 lines will be disabled with stty echo flag
 
-    await javaDockerContainer.start(); // starting / booting repective docker container
+    await cppDockerContainer.start(); // starting / booting repective docker container
 
     console.log("Started Docker container :)");
 
 
-    const logStream = await javaDockerContainer.logs({
+    const logStream = await cppDockerContainer.logs({
         stdout:true, // as it is a read stream 
         stderr:true,
         timestamps: false,
@@ -52,7 +52,7 @@ async function runJava(code:string , inputTestCase : string) {
         })
     })
 
-    await javaDockerContainer.remove(); // it removes docker container once work completed
+    await cppDockerContainer.remove(); // it removes docker container once work completed
 }
 
-export default runJava;
+export default runCpp;
