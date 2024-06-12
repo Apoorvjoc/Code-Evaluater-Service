@@ -1,6 +1,7 @@
 import createContainer from "./containerFactory";
 import { CPP_IMAGE } from "../utils/constants";
 import decodeDockerStream from "./dockerHelper";
+import pullDockerImage from "./pullDockerImage";
 
 
 async function runCpp(code:string , inputTestCase : string) {
@@ -9,6 +10,8 @@ async function runCpp(code:string , inputTestCase : string) {
 
     const runCmd = `echo '${code.replace(/'/g, `'\\"`)}' > main.cpp && g++ main.cpp -o main && echo '${inputTestCase.replace(/'/g, `'\\"`)}' | stdbuf -oL -eL ./main`;
     
+    await pullDockerImage(CPP_IMAGE);
+
     const cppDockerContainer = await createContainer(CPP_IMAGE , 
         ['/bin/sh','-c' , runCmd]
     );

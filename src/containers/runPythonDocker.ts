@@ -1,6 +1,7 @@
 import createContainer from "./containerFactory";
 import { PYTHON_IMAGE } from "../utils/constants";
 import decodeDockerStream from "./dockerHelper";
+import pullDockerImage from "./pullDockerImage";
 
 
 async function runPython(code:string , inputTestCase : string) {
@@ -9,6 +10,8 @@ async function runPython(code:string , inputTestCase : string) {
 
     const runCmd = `echo '${code.replace(/'/g, `'\\"`)}' > test.py && echo '${inputTestCase.replace(/'/g, `'\\"`)}' | python3 test.py`;
     
+    await pullDockerImage(PYTHON_IMAGE)
+
     const pythonDockerContainer = await createContainer(PYTHON_IMAGE , 
         ['/bin/sh','-c' , runCmd]
     );
