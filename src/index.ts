@@ -5,8 +5,8 @@ import serverConfig from "./configs/server.config";
 import appRouter from "./routes";
 import serverAdapter from "./configs/bullBoard.config"; 
 import SampleWorker from "./workers/sampleWorker";
-import runJava from "./containers/runJavaDocker";
-import runCpp from "./containers/runCppDocker";
+import SubmissionWorker from "./workers/submissionWorker";
+import submissionQueueProducer from "./producers/submissionQueueProducer";
 
 const app = express();
  
@@ -22,6 +22,7 @@ app.listen(serverConfig.PORT , ()=>{
     console.log("bull board is running at :" , `http://localhost:${serverConfig.PORT}/ui`);
 
     SampleWorker('sampleQueue'); // creating worker (or consumer) which will listen to async call through queue
+    SubmissionWorker('SubmissionQueue')
 
 //     const code = `x = input()
 // y = input()
@@ -78,7 +79,16 @@ const inputString = `10`
     }
     `
 
-    runCpp(cppCode , inputString)
+    // runCpp(cppCode , inputString)
+
+    submissionQueueProducer({
+        "some_submision_id":{
+            code:cppCode,
+            language:"CPP",
+            inputCase:inputString
+        }
+    })
+
 
     // sampleQueueProducer("SampleJob" , {   // creating producer which will keep object in queue here object as { jobName ,  {name : Apoorv, location : Nainital } }
     //     name : "Apoorv" ,
