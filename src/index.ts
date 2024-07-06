@@ -24,14 +24,14 @@ app.listen(serverConfig.PORT , ()=>{
     SampleWorker('sampleQueue'); // creating worker (or consumer) which will listen to async call through queue
     SubmissionWorker('SubmissionQueue')
 
-//     const code = `x = input()
-// y = input()
-// print("Value of x is : " , x)
-// print("Value of y is : " , y)
-// `;
+    const code = `x = input()
+y = input()
+print("Value of x is : " , x)
+print("Value of y is : " , y)
+`;
 
-// const inputString = `10
-// 20`
+const inputString = `10
+20`
 
 // const pythonCode = 
 // `x = input();
@@ -40,7 +40,7 @@ app.listen(serverConfig.PORT , ()=>{
 //     print(i)
 // `
 
-const inputString = `10`
+// const inputString = `10`
 
     // runPython(pythonCode , inputString);
 
@@ -62,29 +62,27 @@ const inputString = `10`
 
     // runJava(javaCode , inputString)
 
-    const cppCode = `
-    #include<iostream>
-    using namespace std;
+    // const cppCode = `
+    // #include<iostream>
+    // using namespace std;
 
-    int main(){
-        int x;
-        cin>>x;
-        cout<<"Value of x is "<<x<<endl;
+    // int main(){
+    //     int x;
+    //     cin>>x;
+    //     cout<<"Value of x is "<<x<<endl;
 
-        for(int i = 0 ; i<x ;i++){
-            cout<<i<<endl; //this endl is imp for triggering fflush which is used by cpp to run code this can be at last 
-        }
-        cout<<endl; //this can be at last endl for trigger fflush
-        return 0;
-    }
-    `
-
-    // runCpp(cppCode , inputString)
+    //     for(int i = 0 ; i<x ;i++){
+    //         cout<<i<<endl; //this endl is imp for triggering fflush which is used by cpp to run code this can be at last 
+    //     }
+    //     cout<<endl; //this can be at last endl for trigger fflush
+    //     return 0;
+    // }
+    // `
 
     submissionQueueProducer({
         "some_submision_id":{
-            code:cppCode,
-            language:"CPP",
+            code:code,
+            language:"Python",
             inputCase:inputString
         }
     })
